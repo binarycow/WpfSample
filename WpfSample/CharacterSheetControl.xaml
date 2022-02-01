@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="WpfSample.CharacterSheetControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WpfSample"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=local:CharacterSheet, IsDesignTimeCreatable=False}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="CharacterSummary" DataType="{x:Type local:Character}">
+            <Border BorderBrush="Black"
+                    CornerRadius="3" 
+                    BorderThickness="1"
+                    Padding="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" 
+                               Text="{Binding Name}" 
+                               Padding="0, 0, 10, 0"
+                               FontWeight="Bold"/>
+                    <Button Grid.Column="1" 
+                            Content="X"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CharacterSheetControl}, Path=DataContext.RemoveCharacterCommand}"
+                            CommandParameter="{Binding}">
+                    </Button>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <Button Command="{Binding AddCharacterCommand}">Add Character</Button>
+            <ListBox ItemsSource="{Binding Characters}" 
+                     SelectedItem="{Binding SelectedCharacter}"
+                     ItemTemplate="{StaticResource CharacterSummary}" />
+        </StackPanel>
+        <GridSplitter Grid.Column="1" 
+                      Width="5"
+                      HorizontalAlignment="Stretch" />
+        <ContentPresenter Grid.Column="2"
+                          Content="{Binding SelectedCharacter}" />
+    </Grid>
+</UserControl>
